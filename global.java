@@ -4,7 +4,7 @@ public class global
 {
     public class constants
     {
-        final int PERIODIC_DELAY = 100; //Prgram updates this often in millis 
+        final int PERIODIC_DELAY = 10; //Prgram updates this often in millis 
 
         final int FRAME_BORDER_X = 800; // Border size for the window
         final int FRAME_BORDER_Y = 800;    
@@ -15,6 +15,7 @@ public class global
         final int A = 65, LEFT_ARROW = 37;
         final int S = 83, DOWN_ARROW = 40;
         final int D = 68, RIGHT_ARROW = 39;
+        final int RESET = 82;
 
         final int RIGHT = 1, DOWN = 2, LEFT = 3, UP = 4, IDLE = 0;
     

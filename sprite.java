@@ -10,8 +10,8 @@ public class sprite
     coords PANEL_COORDS = null; 
     coords STAGE_LAYOUT_COORDS = null;
     BufferedImage SPRITE_B_IMG = null;
-    int SPRITE_WIDTH = 0;
-    int SPRITE_HEIGHT = 0;    
+    int SPRITE_WIDTH = 0, SPRITE_HEIGHT = 0;
+    int PREV_DIRECTION = 0, CURRENT_DIRECTION = 0;     
 
     public sprite(String file_name, int x, int y)
     {
@@ -35,5 +35,20 @@ public class sprite
     public coords getCenteredCoords()
     {
         return new coords(PANEL_COORDS.x + (SPRITE_WIDTH/2), PANEL_COORDS.y + (SPRITE_HEIGHT/2));
+    }
+
+    public coords getChangeInCoords(boolean PANEL, coords relative_to)
+    {
+        coords for_conversion = null;
+        if (PANEL) 
+        {
+            for_conversion = PANEL_COORDS; 
+        }
+        else 
+        {
+            for_conversion = getCenteredCoords(); 
+        }
+
+        return new coords(for_conversion.x - relative_to.x, for_conversion.y - relative_to.y); 
     }
 }
