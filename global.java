@@ -1,13 +1,15 @@
+import java.awt.*;
+
 public class global
 {
     public class constants
     {
-        final int PERIODIC_DELAY = 200; //Prgram updates this often in millis 
+        final int PERIODIC_DELAY = 100; //Prgram updates this often in millis 
 
         final int FRAME_BORDER_X = 800; // Border size for the window
         final int FRAME_BORDER_Y = 800;    
 
-        final java.awt.Color DEFAULT_BACKGROUND_COLOR = java.awt.Color.BLACK; // Defualt 
+        final Color DEFAULT_BACKGROUND_COLOR = Color.BLACK; // Defualt 
 
         final int W = 87, UP_ARROW = 38;
         final int A = 65, LEFT_ARROW = 37;
@@ -18,10 +20,12 @@ public class global
     
         final String SPRITE_BASE_DIR = "sprites/";
         final int NUM_OF_SPRITES = 2; 
-        final int PACMAN_SPRITES_INDEX =1;
-        final int STAGE_SPRITE_INDEX = 0; 
 
-        int[][] STAGE_LAYOUT = 
+        final int STAGE_LAYOUT_SCALE_FACTOR = 16;
+        final int STAGE_LAYOUT_MAX_X = 25, STAGE_LAYOUT_MAX_Y = 28; 
+        final int PANEL_X_DISPLACEMENT = 24, PANEL_Y_DISPLACEMENT = 24;
+
+        final int[][] STAGE_LAYOUT = 
         {
             {1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1},
             {1,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0,0,1},
@@ -58,7 +62,7 @@ public class global
     constants CONSTANTS = new constants();
 
     final sprite STAGE = new sprite("stage_scaled.png", CONSTANTS.FRAME_BORDER_X/2, CONSTANTS.FRAME_BORDER_Y/2);
-    final sprite PACMAN = new sprite("pacmans.png", STAGE.PANEL_COORDS.x + 24, STAGE.PANEL_COORDS.y + 24);
+    final sprite PACMAN = new sprite("pacman.png", STAGE.PANEL_COORDS.x + CONSTANTS.PANEL_X_DISPLACEMENT, STAGE.PANEL_COORDS.y + CONSTANTS.PANEL_Y_DISPLACEMENT);
 
     sprite[] sprites = {STAGE, PACMAN};
 

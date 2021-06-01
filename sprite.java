@@ -31,4 +31,9 @@ public class sprite
             System.out.println("The sprite, \"" + file_name + "\"'s BufferedImage member is null and the file cannot be read!!! ");
         }       
     }
+
+    public coords getCenteredCoords()
+    {
+        return new coords(PANEL_COORDS.x + (SPRITE_WIDTH/2), PANEL_COORDS.y + (SPRITE_HEIGHT/2));
+    }
 }
