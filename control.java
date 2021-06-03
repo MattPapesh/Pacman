@@ -1,7 +1,10 @@
-public class control
-{
+import basic_fundamentals.*;
+
+public class control 
+{ 
     private IO io = null; 
     private global glob = null;
+    boolean once_up = false, once_down = false;
 
     control(IO io, global glob)
     {
@@ -16,60 +19,89 @@ public class control
 
     void translate(global global, int direction, sprite sprite)
     {
-        sprite.PREV_DIRECTION = sprite.CURRENT_DIRECTION;
-        sprite.CURRENT_DIRECTION = direction; 
-        translateX(global, direction, sprite);
-        translateY(global, direction, sprite);
+        sprite.setDirection(direction); 
+        translateX(global, direction, getTurningTo(global, sprite, false), sprite);
+        translateY(global, direction, getTurningTo(global, sprite, true), sprite);
     }
 
-    void translateX(global global, int direction, sprite sprite)
+    boolean getTurningTo(global global, sprite sprite, boolean turning_to_horizontal)
     {
-        int x = sprite.STAGE_LAYOUT_COORDS.x, y = sprite.STAGE_LAYOUT_COORDS.y;
-        //int delta_x = sprite.getChangeInCoords(false, global.STAGE.PANEL_COORDS).x - global.CONSTANTS.PANEL_X_DISPLACEMENT;
+        int[][] parallel_Y_perpendicular_X_direcionts = {global.CONSTANTS.HORIZONTAL_DIRECTIONS, global.CONSTANTS.VERTICAL_DIRECTIONS};
+        int current_direction = sprite.getCurrentDirection();
+        boolean turning_to = false;
+        
+            for (int direction = 0; direction < 2; direction++)
+            {
+                if (current_direction == parallel_Y_perpendicular_X_direcionts[0][direction])
+                {
+                    turning_to = true; 
+                    if (!turning_to_horizontal)
+                    {
+                        turning_to = (!turning_to);
+                    }
+                }
+            }
+    
+        return turning_to; 
+    }
 
+  
+
+    void translateX(global global, int direction, boolean turn, sprite sprite)
+    {
+        int x = sprite.getStageLayoutCoordinates().x;
+        int y = sprite.getStageLayoutCoordinates().y;
+        int delta_x = sprite.getChangeInCoords(false, global.STAGE.getPanelCoordinates()).x - global.CONSTANTS.PANEL_X_DISPLACEMENT;
+        if (turn) System.out.println("Turned to X");
+ 
         if (direction == global.CONSTANTS.RIGHT && x < global.CONSTANTS.STAGE_LAYOUT_MAX_X && global.CONSTANTS.STAGE_LAYOUT[y][x + 1] == 1)
         {
-            sprite.PANEL_COORDS.x = sprite.PANEL_COORDS.x + global.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR;
-           // sprite.PANEL_COORDS.x++;
-            //if (delta_x % global.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR == 0)
+            sprite.getPanelCoordinates().x++;
+
+            if (delta_x != 0  && delta_x/glob.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR != sprite.getStageLayoutCoordinates().x 
+            && delta_x % global.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR == 0)
             {
-                sprite.STAGE_LAYOUT_COORDS.x++;
+                sprite.setStageLayoutCoordinates(x++, y);
             }
         }
         else if (direction == glob.CONSTANTS.LEFT && x > 0 && global.CONSTANTS.STAGE_LAYOUT[y][x - 1] == 1)
         {
-            sprite.PANEL_COORDS.x = sprite.PANEL_COORDS.x - global.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR;
-           // sprite.PANEL_COORDS.x--;
-           // if (delta_x % global.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR == 0)
+            sprite.getPanelCoordinates().x--;
+
+            if (delta_x/glob.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR != sprite.getStageLayoutCoordinates().x 
+            && delta_x % global.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR == 0)
             {
-                sprite.STAGE_LAYOUT_COORDS.x--; 
+                sprite.setStageLayoutCoordinates(x--, y);
             }
         }
     }
 
-    void translateY(global global, int direction, sprite sprite)
-    {   
-        int x = sprite.STAGE_LAYOUT_COORDS.x;
-        int y = sprite.STAGE_LAYOUT_COORDS.y;
-        int delta_y = sprite.getChangeInCoords(false, global.STAGE.PANEL_COORDS).y - global.CONSTANTS.PANEL_Y_DISPLACEMENT;
-//System.out.println("value: " + delta_y / global.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR + "     layout_y: " + sprite.STAGE_LAYOUT_COORDS.y);
-        if (direction == glob.CONSTANTS.UP && y > 0 && global.CONSTANTS.STAGE_LAYOUT[y - 0][x] == 1)
+    void translateY(global global, int direction, boolean turn, sprite sprite)
+    {    
+        int x = sprite.getStageLayoutCoordinates().x;
+        int y = sprite.getStageLayoutCoordinates().y;
+        int delta_y = sprite.getChangeInCoords(false, global.STAGE.getPanelCoordinates()).y - global.CONSTANTS.PANEL_Y_DISPLACEMENT;
+        if (turn) System.out.println("Turned to Y");
+        if (direction == glob.CONSTANTS.UP && y > 0 && global.CONSTANTS.STAGE_LAYOUT[y-1][x] == 1)
         {
-            //sprite.PANEL_COORDS.y = sprite.PANEL_COORDS.y - global.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR;
-            sprite.PANEL_COORDS.y--;
-            if (delta_y / global.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR != sprite.STAGE_LAYOUT_COORDS.y)
+           sprite.getPanelCoordinates().y--;
+
+           if (delta_y/glob.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR != sprite.getStageLayoutCoordinates().y 
+           && delta_y % glob.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR == 0)
+           {
+               sprite.getStageLayoutCoordinates().y--; 
+           }
+        }
+        else if (direction == glob.CONSTANTS.DOWN && y < global.CONSTANTS.STAGE_LAYOUT_MAX_Y && global.CONSTANTS.STAGE_LAYOUT[y+1][x] == 1)
+        {
+            sprite.getPanelCoordinates().y++;
+
+            if (delta_y != 0 && delta_y/glob.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR != sprite.getStageLayoutCoordinates().y 
+            && delta_y % glob.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR == 0)
             {
-                sprite.STAGE_LAYOUT_COORDS.y--; 
+                sprite.getStageLayoutCoordinates().y++; 
             }
         }
-        else if (direction == glob.CONSTANTS.DOWN && y < global.CONSTANTS.STAGE_LAYOUT_MAX_Y && global.CONSTANTS.STAGE_LAYOUT[y + 0][x] == 1)
-        {
-            //sprite.PANEL_COORDS.y = sprite.PANEL_COORDS.y + global.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR;
-            sprite.PANEL_COORDS.y++;
-            if (delta_y / global.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR == sprite.STAGE_LAYOUT_COORDS.y)
-            {
-                sprite.STAGE_LAYOUT_COORDS.y++; 
-            }
-        }
+        
     }
 }

@@ -1,3 +1,5 @@
+package basic_fundamentals;
+
 public class coords 
 {
     public int x = 0;

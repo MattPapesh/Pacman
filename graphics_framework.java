@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import basic_fundamentals.*;
 
 public class graphics_framework extends JPanel
 {
@@ -41,7 +42,7 @@ public class graphics_framework extends JPanel
         {
             graphics.drawImage
             (
-                glob.sprites[i].SPRITE_B_IMG, glob.sprites[i].PANEL_COORDS.x, glob.sprites[i].PANEL_COORDS.y, null
+                glob.sprites[i].getBufferedImage(), glob.sprites[i].getPanelCoordinates().x, glob.sprites[i].getPanelCoordinates().y, null
             );
         } 
     }
