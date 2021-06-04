@@ -1,4 +1,4 @@
-package basic_fundamentals;
+package fundamentals;
 
 public class path 
 {

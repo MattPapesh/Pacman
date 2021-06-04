@@ -1,16 +1,25 @@
 import javax.swing.*;
+
+import fundamentals.*;
+
 import java.awt.*;
-import basic_fundamentals.*;
 
 public class graphics_framework extends JPanel
 {
-    private global glob = null;
     private control control = null;
+    private final int PERIODIC_UPDATE_DELAY;
+    private final Color DEFAULT_BACKGROUND_COLOR;
+    private sprite[] sprites = null;
+    private final int NUM_OF_SPRITES;  
 
-    public graphics_framework(control control, global glob)
+    public graphics_framework(control control, int PERIODIC_UPDATE_DELAY, Color DEFUALT_BACKGROUND_COLOR, sprite[] sprites, int NUM_OF_SPRITES)
     {
-        this.control = control;
-        this.glob = glob; 
+        //this.control = control;
+        this.PERIODIC_UPDATE_DELAY = PERIODIC_UPDATE_DELAY;
+        this.DEFAULT_BACKGROUND_COLOR = DEFUALT_BACKGROUND_COLOR;
+        this.sprites = sprites; 
+        this.NUM_OF_SPRITES = NUM_OF_SPRITES;
+    
     }
 
     public void paintComponent(Graphics graphics) // what JPanel constantly calls to create JFrame graphics
@@ -21,16 +30,16 @@ public class graphics_framework extends JPanel
 
     void repaintPeriodicRate()
     {
-        try {Thread.sleep(glob.CONSTANTS.PERIODIC_DELAY);} 
+        try {Thread.sleep(PERIODIC_UPDATE_DELAY);} 
         catch(InterruptedException e){}
     }
 
     Graphics prepareComponent(Graphics graphics)
     {
-        control.run(); 
+        control.execute(); 
         super.paintComponent(graphics);
         super.repaint();
-        super.setBackground(glob.CONSTANTS.DEFAULT_BACKGROUND_COLOR);
+        super.setBackground(DEFAULT_BACKGROUND_COLOR);
         repaintPeriodicRate();
 
         return graphics; 
@@ -38,11 +47,11 @@ public class graphics_framework extends JPanel
 
     void displayGame(Graphics graphics)
     {
-        for (int i = 0; i < glob.CONSTANTS.NUM_OF_SPRITES; i++)
+        for (int i = 0; i < NUM_OF_SPRITES; i++)
         {
             graphics.drawImage
             (
-                glob.sprites[i].getBufferedImage(), glob.sprites[i].getPanelCoordinates().x, glob.sprites[i].getPanelCoordinates().y, null
+                sprites[i].getBufferedImage(), sprites[i].getPanelCoordinates().x, sprites[i].getPanelCoordinates().y, null
             );
         } 
     }

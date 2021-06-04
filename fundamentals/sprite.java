@@ -1,4 +1,4 @@
-package basic_fundamentals;
+package fundamentals;
 import java.awt.image.*;
 import javax.imageio.ImageIO;
 import java.io.*;
@@ -10,23 +10,21 @@ public class sprite
     BufferedImage sprite_b_img= null;
     final String SPRITE_BASE_DIR = "assets/sprites/";
     coords panel_coords = null; 
-    coords stage_layout_coords = null;
+    coords layout_coords = null;
     int previous_direction = 0;
     int current_direction = 0;     
 
     public coords getPanelCoordinates(){return panel_coords; }
-    public coords getStageLayoutCoordinates(){return stage_layout_coords; }
-    public int getCurrentDirection(){return current_direction; }
-    public int getPreviousDirection(){return previous_direction; }
+    public coords getLayoutCoordinates(){return layout_coords; }
     public BufferedImage getBufferedImage(){return sprite_b_img; }
-    public void setDirection(int current_direction) {previous_direction = this.current_direction; this.current_direction = current_direction; }
-    public void setStageLayoutCoordinates(int x, int y){ stage_layout_coords.x = x; stage_layout_coords.y = y; } 
+    public void setPanelCoordinates(int x, int y){panel_coords.x = x; panel_coords.y = y; }
+    public void setLayoutCoordinates(int x, int y){ layout_coords.x = x; layout_coords.y = y; } 
 
     public sprite(String file_name, int x, int y)
     {
         updateBufferedImage(file_name);
 
-        stage_layout_coords = new coords(0, 0);  
+        layout_coords = new coords(0, 0);  
         panel_coords = new coords(x - (sprite_width/2), y - (sprite_height/2));
     }
 

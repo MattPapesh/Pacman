@@ -1,105 +1,84 @@
-import basic_fundamentals.*;
+import assets.*;
+import fundamentals.*;
 
 public class control 
 { 
     private IO io = null; 
-    private global glob = null;
-    boolean once_up = false, once_down = false;
-
-    control(IO io, global glob)
+    private pacman pacman = null;
+    private final int LAYOUT_SCALE_FACTOR;
+    private final int[][] LAYOUT;
+    private final int LAYOUT_MAX_X, LAYOUT_MAX_Y;
+    private final int PANEL_X_DISPLACEMENT, PANEL_Y_DISPLACEMENT; 
+    
+    control(IO io, int[][] LAYOUT, int LAYOUT_SCALE_FACTOR, int LAYOUT_MAX_X, int LAYOUT_MAX_Y, int PANEL_X_DISPLACEMENT, int PANEL_Y_DISPLACEMENT)
     {
         this.io = io;
-        this.glob = glob; 
+        this.LAYOUT = LAYOUT; this.LAYOUT_SCALE_FACTOR = LAYOUT_SCALE_FACTOR; this.LAYOUT_MAX_X = LAYOUT_MAX_X; this.LAYOUT_MAX_Y = LAYOUT_MAX_Y;
+        this.PANEL_X_DISPLACEMENT = PANEL_X_DISPLACEMENT; this.PANEL_Y_DISPLACEMENT = PANEL_Y_DISPLACEMENT;
+        
     }   
 
-    void run()
+    void execute()
     {
-        translate(glob, io.getDirection(), glob.PACMAN);
+       // pacman = new pacman(glob, glob.PACMAN); 
+        pacman.toggleAbility(true);
+        pacman.execute(); 
     }
 
-    void translate(global global, int direction, sprite sprite)
-    {
-        sprite.setDirection(direction); 
-        translateX(global, direction, getTurningTo(global, sprite, false), sprite);
-        translateY(global, direction, getTurningTo(global, sprite, true), sprite);
-    }
 
-    boolean getTurningTo(global global, sprite sprite, boolean turning_to_horizontal)
+    void translateX(constants global, boolean turn, sprite sprite)
     {
-        int[][] parallel_Y_perpendicular_X_direcionts = {global.CONSTANTS.HORIZONTAL_DIRECTIONS, global.CONSTANTS.VERTICAL_DIRECTIONS};
-        int current_direction = sprite.getCurrentDirection();
-        boolean turning_to = false;
-        
-            for (int direction = 0; direction < 2; direction++)
-            {
-                if (current_direction == parallel_Y_perpendicular_X_direcionts[0][direction])
-                {
-                    turning_to = true; 
-                    if (!turning_to_horizontal)
-                    {
-                        turning_to = (!turning_to);
-                    }
-                }
-            }
-    
-        return turning_to; 
-    }
-
-  
-
-    void translateX(global global, int direction, boolean turn, sprite sprite)
-    {
-        int x = sprite.getStageLayoutCoordinates().x;
-        int y = sprite.getStageLayoutCoordinates().y;
-        int delta_x = sprite.getChangeInCoords(false, global.STAGE.getPanelCoordinates()).x - global.CONSTANTS.PANEL_X_DISPLACEMENT;
+        int x = sprite.getLayoutCoordinates().x;
+        int y = sprite.getLayoutCoordinates().y;
+        int delta_x = sprite.getChangeInCoords(false, global.STAGE.getPanelCoordinates()).x - PANEL_X_DISPLACEMENT;
         if (turn) System.out.println("Turned to X");
  
-        if (direction == global.CONSTANTS.RIGHT && x < global.CONSTANTS.STAGE_LAYOUT_MAX_X && global.CONSTANTS.STAGE_LAYOUT[y][x + 1] == 1)
+        if (io.getDirectiongRight() && x < LAYOUT_MAX_X && LAYOUT[y][x + 1] == 1)
         {
             sprite.getPanelCoordinates().x++;
 
-            if (delta_x != 0  && delta_x/glob.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR != sprite.getStageLayoutCoordinates().x 
-            && delta_x % global.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR == 0)
+            if (delta_x != 0  && delta_x/LAYOUT_SCALE_FACTOR != sprite.getLayoutCoordinates().x 
+            && delta_x % LAYOUT_SCALE_FACTOR == 0)
             {
-                sprite.setStageLayoutCoordinates(x++, y);
+                sprite.setLayoutCoordinates(x++, y);
             }
         }
-        else if (direction == glob.CONSTANTS.LEFT && x > 0 && global.CONSTANTS.STAGE_LAYOUT[y][x - 1] == 1)
+        else if (io.getDirectingLeft() && x > 0 && LAYOUT[y][x - 1] == 1)
         {
             sprite.getPanelCoordinates().x--;
 
-            if (delta_x/glob.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR != sprite.getStageLayoutCoordinates().x 
-            && delta_x % global.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR == 0)
+            if (delta_x/LAYOUT_SCALE_FACTOR != sprite.getLayoutCoordinates().x 
+            && delta_x % LAYOUT_SCALE_FACTOR == 0)
             {
-                sprite.setStageLayoutCoordinates(x--, y);
+                sprite.setLayoutCoordinates(x--, y);
             }
         }
     }
 
-    void translateY(global global, int direction, boolean turn, sprite sprite)
+    void translateY(constants global, boolean turn, sprite sprite)
     {    
-        int x = sprite.getStageLayoutCoordinates().x;
-        int y = sprite.getStageLayoutCoordinates().y;
-        int delta_y = sprite.getChangeInCoords(false, global.STAGE.getPanelCoordinates()).y - global.CONSTANTS.PANEL_Y_DISPLACEMENT;
+        int x = sprite.getLayoutCoordinates().x;
+        int y = sprite.getLayoutCoordinates().y;
+        int delta_y = sprite.getChangeInCoords(false, global.STAGE.getPanelCoordinates()).y - PANEL_Y_DISPLACEMENT;
         if (turn) System.out.println("Turned to Y");
-        if (direction == glob.CONSTANTS.UP && y > 0 && global.CONSTANTS.STAGE_LAYOUT[y-1][x] == 1)
+        if (io.getDirectingUp() && y > 0 && LAYOUT[y-1][x] == 1)
         {
            sprite.getPanelCoordinates().y--;
 
-           if (delta_y/glob.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR != sprite.getStageLayoutCoordinates().y 
-           && delta_y % glob.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR == 0)
+           if (delta_y/LAYOUT_SCALE_FACTOR != sprite.getLayoutCoordinates().y 
+           && delta_y % LAYOUT_SCALE_FACTOR == 0)
            {
-               sprite.getStageLayoutCoordinates().y--; 
+               sprite.getLayoutCoordinates().y--; 
            }
         }
-        else if (direction == glob.CONSTANTS.DOWN && y < global.CONSTANTS.STAGE_LAYOUT_MAX_Y && global.CONSTANTS.STAGE_LAYOUT[y+1][x] == 1)
+        else if (io.getDirectingDown() && y < LAYOUT_MAX_Y && LAYOUT[y+1][x] == 1)
         {
             sprite.getPanelCoordinates().y++;
 
-            if (delta_y != 0 && delta_y/glob.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR != sprite.getStageLayoutCoordinates().y 
-            && delta_y % glob.CONSTANTS.STAGE_LAYOUT_SCALE_FACTOR == 0)
+            if (delta_y != 0 && delta_y/LAYOUT_SCALE_FACTOR != sprite.getLayoutCoordinates().y 
+            && delta_y % LAYOUT_SCALE_FACTOR == 0)
             {
-                sprite.getStageLayoutCoordinates().y++; 
+                sprite.getLayoutCoordinates().y++; 
             }
         }
         
