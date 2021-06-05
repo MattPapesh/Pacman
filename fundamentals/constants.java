@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class constants
 {
-    public final int PERIODIC_UPDATE_DELAY = 10; //Prgram updates this often in millis 
+    public final int PERIODIC_UPDATE_DELAY = 100; //Prgram updates this often in millis 
 
     public final int FRAME_BORDER_X = 800; // Border size for the window
     public final int FRAME_BORDER_Y = 800;    
@@ -17,7 +17,7 @@ public class constants
     public final int RESET = 82;
 
     public final int RIGHT = 1, DOWN = 2, LEFT = 3, UP = 4, IDLE = 0;
-    public final int[] HORIZONTAL_DIRECTIONS = {RIGHT, LEFT}, VERTICAL_DIRECTIONS = {UP, DOWN};
+    public final int[] HORIZONTAL_DIRECTIONS = {LEFT, RIGHT}, VERTICAL_DIRECTIONS = {UP, DOWN};
     
     public final String SPRITE_BASE_DIR = "sprites/";
     public final int NUM_OF_SPRITES = 2; 
@@ -58,9 +58,4 @@ public class constants
         {1,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,1},
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
     }; 
-
-    public final sprite STAGE = new sprite("stage_scaled.png", FRAME_BORDER_X/2, FRAME_BORDER_Y/2);
-    public final sprite PACMAN = new sprite("pacman.png", STAGE.getPanelCoordinates().x + PANEL_X_DISPLACEMENT, STAGE.getPanelCoordinates().y + PANEL_Y_DISPLACEMENT);
-
-    public sprite[] sprites = {STAGE, PACMAN};
 }

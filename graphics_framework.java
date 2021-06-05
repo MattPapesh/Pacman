@@ -14,7 +14,7 @@ public class graphics_framework extends JPanel
 
     public graphics_framework(control control, int PERIODIC_UPDATE_DELAY, Color DEFUALT_BACKGROUND_COLOR, sprite[] sprites, int NUM_OF_SPRITES)
     {
-        //this.control = control;
+        this.control = control;
         this.PERIODIC_UPDATE_DELAY = PERIODIC_UPDATE_DELAY;
         this.DEFAULT_BACKGROUND_COLOR = DEFUALT_BACKGROUND_COLOR;
         this.sprites = sprites; 
